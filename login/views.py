@@ -80,6 +80,11 @@ class LogoutAPIView(generics.GenericAPIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class UserDelete(generics.DestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
 """
 class RegisterApi(generics.GenericAPIView):
     serializer_class = RegisterSerializer
