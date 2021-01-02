@@ -9,15 +9,15 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from login.models import StaffProfile
 from login.serializers import RegisterSerializer, UserSerializer, ChangePasswordSerializer, UpdateUserSerializer, \
-    LogoutSerializer
-
+    LogoutSerializer, UserProfileSerializer, UpdateUserProfileSerializer
 
 User = get_user_model()
 
 
 # user registration view
-class RegisterApi(generics.CreateAPIView):
+class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
@@ -30,6 +30,13 @@ class UserView(generics.ListAPIView):
     serializer_class = UserSerializer
 
 
+# user detail view
+class UserDetail(generics.RetrieveAPIView):
+    queryset = StaffProfile.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserProfileSerializer
+
+
 # change password view
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
@@ -37,12 +44,26 @@ class ChangePasswordView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
 
 
-# update profile view
-class UpdateProfileView(generics.UpdateAPIView):
+# update user
+class UpdateUserView(generics.UpdateAPIView):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
     serializer_class = UpdateUserSerializer
 
+
+# user profile view
+class UserProfileView(generics.CreateAPIView):
+    queryset = StaffProfile.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserProfileSerializer
+
+
+# update user profile
+
+class UpdateUserProfileView(generics.UpdateAPIView):
+    queryset = StaffProfile.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UpdateUserProfileSerializer
 
 # logout view
 class LogoutView(generics.GenericAPIView):
@@ -84,6 +105,7 @@ class LogoutAPIView(generics.GenericAPIView):
 class UserDelete(generics.DestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
 
 """
 class RegisterApi(generics.GenericAPIView):
